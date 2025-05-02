@@ -1,20 +1,15 @@
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
 
 public class AccountingLedger {
-    private static final String LEDGER_FILE = "transactions.csv";
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        application: while (true) {
-            displayHomeScreen();
-            String choice = scanner.nextLine().toUpperCase();
-            switch (choice) {
+        application:
+        while (true) {
+            Printer.printHomeScreen();
+            String option = scanner.nextLine().toUpperCase();
+            switch (option) {
                 case "D":
                     addDeposit();
                     break;
@@ -27,38 +22,58 @@ public class AccountingLedger {
                 case "X":
                     break application;
                 default:
-                    System.out.println("Invalid choice");
+                    System.out.println("Invalid option");
             }
         }
         scanner.close();
     }
 
     private static void displayLedger() {
+        List<LedgerEntry> ledger = FileIO.getLedger();
+        if (ledger.isEmpty()) {
+            System.out.println("Ledger is empty");
+            return;
+        }
 
-    }
+        ledger.sort((a, b) -> b.getDate().compareTo(a.getDate()));
 
-    private static List<LedgerEntry> getLedger() {
-        // read csv
-        // convert each row into LedgerEntry
-        return List.of();
-    }
+        while (true) {
+            Printer.printLedgerMenu();
+            String option = scanner.nextLine().toUpperCase();
 
-    private static void displayHomeScreen() {
-        System.out.println("=================================");
-        System.out.println("Welcome to your Account Ledger!");
-        System.out.println("=================================");
-
-        System.out.println("\"D\") Add Deposit");
-        System.out.println("\"P\") Make Payment");
-        System.out.println("\"L\") Ledger");
-        System.out.println("\"X\") Exit");
-        System.out.print("Please select an option: ");
-        String response = scanner.nextLine();
-
+            switch (option) {
+                case "A":
+                    Printer.printEntries(ledger);
+                    break;
+                case "D":
+                    List<LedgerEntry> depositEntries = Filter.filterEntriesByDeposit(ledger, true);
+                    if (depositEntries.isEmpty()) {
+                        System.out.println("No deposits in Ledger");
+                    } else {
+                        Printer.printEntries(depositEntries);
+                    }
+                    break;
+                case "P":
+                    List<LedgerEntry> paymentEntries = Filter.filterEntriesByDeposit(ledger, false);
+                    if (paymentEntries.isEmpty()) {
+                        System.out.println("No payments in Ledger");
+                    } else {
+                        Printer.printEntries(paymentEntries);
+                    }
+                    break;
+                case "R":
+                    reportsMenu();
+                    break;
+                case "H":
+                    return;
+                default:
+                    System.out.println("Invalid option");
+            }
+        }
     }
 
     private static void addDeposit() {
-        System.out.println("Enter deposit information:");
+        System.out.println("Enter deposit information");
         System.out.print("Enter vendor name: ");
         String vendor = scanner.nextLine();
         System.out.print("Enter description: ");
@@ -66,58 +81,83 @@ public class AccountingLedger {
         System.out.print("Enter amount: ");
         double amount = Double.parseDouble(scanner.nextLine());
         LedgerEntry entry = new LedgerEntry(description, vendor, amount);
-        addToLedger(entry);
+        FileIO.addToLedger(entry);
     }
 
     private static void makePayment() {
-        System.out.println("Please enter payment information:");
+        System.out.println("Please enter payment information");
         System.out.print("Enter vendor name: ");
         String vendor = scanner.nextLine();
         System.out.print("Enter description: ");
         String description = scanner.nextLine();
         System.out.print("Enter amount: ");
-        double amount = Double.parseDouble(scanner.nextLine()); // Parse amount
-        amount = -Math.abs(amount); // Ensure amount is negative
+        double amount = Double.parseDouble(scanner.nextLine());
+        amount = -Math.abs(amount);
         LedgerEntry entry = new LedgerEntry(description, vendor, amount);
-        addToLedger(entry);
+        FileIO.addToLedger(entry);
     }
 
-    private static void addToLedger(LedgerEntry entry) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        List<String> row = List.of(
-                dateFormat.format(entry.getDate()),
-                entry.getDescription(),
-                entry.getVendor(),
-                String.valueOf(entry.getAmount())
-        );
-        addCSVRow(row);
-    }
-
-    private static void addCSVRow(List<String> row) {
-        try {
-            File ledger = new File(LEDGER_FILE);
-            final boolean createHeaders = !ledger.exists();
-            FileWriter fileWriter = new FileWriter(ledger,true);
-            BufferedWriter writer = new BufferedWriter(fileWriter);
-            if (createHeaders) {
-                List<String> headers = List.of("DateTime", "Description", "Vendor", "Amount");
-                writeCSVRow(writer, headers);
-            }
-            writeCSVRow(writer, row);
-            writer.close();
-            fileWriter.close();
-        } catch (IOException e) {
-            System.err.println("Error writing to CSV file: " + e.getMessage());
+    private static void reportsMenu() {
+        List<LedgerEntry> ledger = FileIO.getLedger();
+        if (ledger.isEmpty()) {
+            System.out.println("Ledger is empty");
+            return;
         }
-    }
+        ledger.sort((a, b) -> b.getDate().compareTo(a.getDate()));
 
-    private static void writeCSVRow(BufferedWriter writer, List<String> row) throws IOException {
-        for (int i = 0; i < row.size(); i++) {
-            writer.write(row.get(i));
-            if (i < row.size() - 1) {
-                writer.write("|");
+        reportsMenu:
+        while (true) {
+            Printer.printReportsMenu();
+            String option = scanner.nextLine();
+
+            switch (option) {
+                case "1":
+                    List<LedgerEntry> filteredByMonthToDate = Filter.filterEntriesByDate(ledger, "MONTH_TO_DATE");
+                    if (filteredByMonthToDate.isEmpty()) {
+                        System.out.println("No entries from previous month");
+                    } else {
+                        Printer.printEntries(filteredByMonthToDate);
+                    }
+                    break;
+                case "2":
+                    List<LedgerEntry> filteredByPreviousMonth = Filter.filterEntriesByDate(ledger, "PREVIOUS_MONTH");
+                    if (filteredByPreviousMonth.isEmpty()) {
+                        System.out.println("No entries from previous month");
+                    } else {
+                        Printer.printEntries(filteredByPreviousMonth);
+                    }
+                    break;
+                case "3":
+                    List<LedgerEntry> filteredByYearToDate = Filter.filterEntriesByDate(ledger, "YEAR_TO_DATE");
+                    if (filteredByYearToDate.isEmpty()) {
+                        System.out.println("No entries from year to date");
+                    } else {
+                        Printer.printEntries(filteredByYearToDate);
+                    }
+                    break;
+                case "4":
+                    List<LedgerEntry> filteredByPreviousYear = Filter.filterEntriesByDate(ledger, "PREVIOUS_YEAR");
+                    if (filteredByPreviousYear.isEmpty()) {
+                        System.out.println("No entries from previous year");
+                    } else {
+                        Printer.printEntries(filteredByPreviousYear);
+                    }
+                    break;
+                case "5":
+                    System.out.print("Enter vendor name: ");
+                    String vendorName = scanner.nextLine();
+                    List<LedgerEntry> filteredByVendorEntries = Filter.filterEntriesByVendor(ledger, vendorName);
+                    if (filteredByVendorEntries.isEmpty()) {
+                        System.out.println("No vendors with name \"" + vendorName + "\"");
+                    } else {
+                        Printer.printEntries(filteredByVendorEntries);
+                    }
+                    break;
+                case "0":
+                    break reportsMenu;
+                default:
+                    System.out.println("Invalid option");
             }
         }
-        writer.newLine();
     }
 }
