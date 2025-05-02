@@ -34,15 +34,15 @@ Welcome to my Accounting Ledger project! This is a simple Java-based command-lin
 One interesting feature of this app is the ability to filter ledger entries by different time periods. The filtering logic uses `Calendar` to compare the dates and filter out the relevant entries based on the timeframes.
 
 Here's a snippet from the`Filter.java` class where I filter for previous month entries:
-```
+```java
 case "PREVIOUS_MONTH":
-                    Calendar prevMonthCal = (Calendar) currentCalendar.clone();
-                    prevMonthCal.add(Calendar.MONTH, -1);
-                    if (entryCalendar.get(Calendar.YEAR) == prevMonthCal.get(Calendar.YEAR) &&
-                            entryCalendar.get(Calendar.MONTH) == prevMonthCal.get(Calendar.MONTH)) {
-                        filtered.add(entry);
-                    }
-                    break;
+    Calendar prevMonthCal = (Calendar) currentCalendar.clone();
+    prevMonthCal.add(Calendar.MONTH, -1);
+    if (entryCalendar.get(Calendar.YEAR) == prevMonthCal.get(Calendar.YEAR) &&
+            entryCalendar.get(Calendar.MONTH) == prevMonthCal.get(Calendar.MONTH)) {
+        filtered.add(entry);
+    }
+    break;
 ```
 
 
