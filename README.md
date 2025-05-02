@@ -3,28 +3,30 @@
 ## Project Description
 Welcome to my Accounting Ledger project! This is a simple Java-based command-line application that helps users track deposits and payments while generating useful reports based on timeframes or vendors. Users can add transactions, view their full ledger, or filter entries by type or date.
 
-# Project Features
+## Project Features
 
-Add deposits and payments\
-View all ledger entries or filter by:\
-Deposits only\
-Payments only\
-Date ranges (month-to-date, previous month, year-to-date, previous year)\
-Vendor name\
-Saves entries to `transaction.csv` and loads them each time the program runs\
+-Add deposits and payments\
+-View all ledger entries or filter by:\
+-Deposits only\
+-Payments only\
+-Date ranges (month-to-date, previous month, year-to-date, previous year)\
+-Vendor name\
+-Saves entries to `transaction.csv` and loads them each time the program runs\
 
-### Home Screen : 
+### Home Screen 
+#### Add Deposit, Make Payment, Exit :
 ![Deposit_Payment_Exit](https://github.com/user-attachments/assets/c47b97d1-f9d3-46e1-8922-e949f84e47a5)
 
 ### Ledger Entries:
+#### Ledger, all entries:
 ![Ledger_opt_a](https://github.com/user-attachments/assets/c5bdb7c5-defb-4a4f-84f5-effaf69b0760)
-
+### Deposits and Payments:
 ![deposit_payment_ledger](https://github.com/user-attachments/assets/18992cd8-f984-4a93-afa0-8171db27d3a3)
-
+### Reports, month to date:
 ![reports_monthtodate](https://github.com/user-attachments/assets/aa4765d2-fb25-4677-a7a6-86c5856742b4)
-
+### Previous month, YTD, previous year :
 ![previous month, YTD, previous year](https://github.com/user-attachments/assets/06dbac59-a76b-45b7-a4d4-e934443e5a16)
-
+### Search by vendor, back, home :
 ![search by vendor_ back_ home](https://github.com/user-attachments/assets/13df0826-2c44-446d-b65e-7e6635397ac6)
 
 ---
