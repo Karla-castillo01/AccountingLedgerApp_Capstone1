@@ -1,21 +1,48 @@
 # Account Ledger
 
 ## Project Description
-This is an accounting ledger application that helps users manage financial transactions.
-It allows you to add deposits and payments, view a detailed ledger, and generate reports for specific time periods. 
-The app is designed to be simple and easy to use, providing a clean interface for interacting with your finances.
-It reads and writes data to a `transactions.csv` file, storing transaction details like `vendor name`, `description`, and` amount`. 
-Users can filter and sort ledger entries by `date`, `vendor`, or `transaction` type, and it offers a clear, efficient way to track financial activity.
+Welcome to my Accounting Ledger project! This is a simple Java-based command-line application that helps users track deposits and payments while generating useful reports based on timeframes or vendors. Users can add transactions, view their full ledger, or filter entries by type or date.
 
-### Home Screen : 
+## Project Features
 
-![Deposit_Payment_Exit.png](../../../Desktop/Deposit_Payment_Exit.png)
+-Add deposits and payments\
+-View all ledger entries or filter by:\
+-Deposits only\
+-Payments only\
+-Date ranges (month-to-date, previous month, year-to-date, previous year)\
+-Vendor name\
+-Saves entries to `transaction.csv` and loads them each time the program runs\
+
+### Home Screen
+##### Add Deposit, Make Payment, Exit :
+![Deposit_Payment_Exit](https://github.com/user-attachments/assets/c47b97d1-f9d3-46e1-8922-e949f84e47a5)
 
 ### Ledger Entries:
-![Ledger_opt_a.png](../../../Desktop/Ledger_opt_a.png) \
-![deposit_payment_ledger.png](../../../Desktop/deposit_payment_ledger.png) \
-![reports_monthtodate.png](../../../Desktop/reports_monthtodate.png) \
-![previous month, YTD, previous year.png](../../../Desktop/previous%20month%2C%20YTD%2C%20previous%20year.png) \
-![search by vendor_ back_ home.png](../../../Desktop/search%20by%20vendor_%20back_%20home.png) \
+##### Ledger, All entries:
+![Ledger_opt_a](https://github.com/user-attachments/assets/c5bdb7c5-defb-4a4f-84f5-effaf69b0760)
+#### Deposits and Payments:
+![deposit_payment_ledger](https://github.com/user-attachments/assets/18992cd8-f984-4a93-afa0-8171db27d3a3)
+#### Reports, Month to Date:
+![reports_monthtodate](https://github.com/user-attachments/assets/aa4765d2-fb25-4677-a7a6-86c5856742b4)
+#### Previous month, YTD, Previous year :
+![previous month, YTD, previous year](https://github.com/user-attachments/assets/06dbac59-a76b-45b7-a4d4-e934443e5a16)
+#### Search by vendor, Back, Home :
+![search by vendor_ back_ home](https://github.com/user-attachments/assets/13df0826-2c44-446d-b65e-7e6635397ac6)
+
 ---
+## Interesting Code Snippet
+One interesting feature of this app is the ability to filter ledger entries by different time periods. The filtering logic uses `Calendar` to compare the dates and filter out the relevant entries based on the timeframes.
+
+Here's a snippet from the`Filter.java` class where I filter for previous month entries:
+```
+case "PREVIOUS_MONTH":
+                    Calendar prevMonthCal = (Calendar) currentCalendar.clone();
+                    prevMonthCal.add(Calendar.MONTH, -1);
+                    if (entryCalendar.get(Calendar.YEAR) == prevMonthCal.get(Calendar.YEAR) &&
+                            entryCalendar.get(Calendar.MONTH) == prevMonthCal.get(Calendar.MONTH)) {
+                        filtered.add(entry);
+                    }
+                    break;
+```
+
 
