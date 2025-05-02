@@ -11,7 +11,7 @@ Welcome to my Accounting Ledger project! This is a simple Java-based command-lin
 -Payments only\
 -Date ranges (month-to-date, previous month, year-to-date, previous year)\
 -Vendor name\
--Saves entries to `transaction.csv` and loads them each time the program runs\
+-Saves entries to `transaction.csv` and loads them each time the program runs
 
 ### Home Screen 
 ##### Add Deposit, Make Payment, Exit :
