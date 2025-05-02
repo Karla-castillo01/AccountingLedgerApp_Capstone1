@@ -13,7 +13,7 @@ Welcome to my Accounting Ledger project! This is a simple Java-based command-lin
 -Vendor name\
 -Saves entries to `transaction.csv` and loads them each time the program runs\
 
-### Home Screen
+### Home Screen 
 ##### Add Deposit, Make Payment, Exit :
 ![Deposit_Payment_Exit](https://github.com/user-attachments/assets/c47b97d1-f9d3-46e1-8922-e949f84e47a5)
 
@@ -44,5 +44,6 @@ case "PREVIOUS_MONTH":
                     }
                     break;
 ```
+
 
 
